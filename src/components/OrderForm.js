@@ -1,5 +1,6 @@
 import React from "react";
 import cross from "../assets/cross.png";
+import {ADDRESS} from "../settings";
 
 export default function OrderForm({setOrderForm, order}) {
     const initState = {name: "", surname: "", middleName: "", number: "", email: ""}
@@ -26,7 +27,7 @@ export default function OrderForm({setOrderForm, order}) {
                 </div>
 
                 <button className="neutral-button accept" onClick={() => {
-                    fetch("http://localhost:3001/order", {
+                    fetch(ADDRESS + "/order", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
