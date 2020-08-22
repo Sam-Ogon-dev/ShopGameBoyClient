@@ -1,6 +1,7 @@
 import store from "./store";
 import changeGameListAction from "./Actions/changeGameListAction";
 import {addItemBasketAction, deleteItemBasketAction, toDefaultBasketAction} from "./Actions/changeBasketAction";
+import {ADDRESS} from "./settings";
 
 export function getGames() {
     let props = store.getState().filterReducer;
@@ -14,7 +15,7 @@ export function getGames() {
     if(props.currentPage.position) { query.push(`position=${props.currentPage.position}`) }
     if (query.length) { query = "?" + query.join("&") }
 
-    fetch("http://localhost:3001/games" + query)
+    fetch(ADDRESS + "/games" + query)
         .then(r => r.json())
         .then(r => store.dispatch(changeGameListAction(r)));
 
