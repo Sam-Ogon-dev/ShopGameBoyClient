@@ -2,15 +2,10 @@ import React from "react";
 import Arrow_2 from "../assets/arrow_2.png";
 import {connect} from "react-redux";
 import changeFilterAction from "../Actions/changeFilterAction";
+import {getGames} from "../service";
+import changeGameListAction from "../Actions/changeGameListAction";
 
-function GenresMenu({mapDispatchToProps}) {
-
-    const [filter, setFilter] = React.useState({
-        price: false,
-        rating: false,
-        genre: "",
-        searchTitle: ""
-    });
+function GenresMenu({filterReducer, changeFilterAction}) {
 
     const [genres, setGenres] = React.useState([]);
 
@@ -22,53 +17,59 @@ function GenresMenu({mapDispatchToProps}) {
 
 
     function changeFilterValue(label, toDefault, targetElement) {
-        switch (filter[label]) {
+        switch (filterReducer[label]) {
             case false:
-                setFilter(filter => ({...filter, [label]: "up"}));
+                changeFilterAction({...filterReducer, [label]: "up", [toDefault]: false})
                 targetElement.classList = "title-simple neutral-button active-simple";
                 break;
             case "up":
-                setFilter(filter => ({...filter, [label]: "down"}));
+                changeFilterAction({...filterReducer, [label]: "down"})
                 targetElement.classList = "title-simple neutral-button active-rotate";
                 break;
             case "down":
-                setFilter(filter => ({...filter, [label]: false}));
+                changeFilterAction({...filterReducer, [label]: false})
                 targetElement.classList = "title-simple neutral-button";
                 break;
         }
-        setFilter(filter => ({...filter, [toDefault]: false}));
     }
 
 
     return (
         <>
             {genres.map(genre =>
-                <div key={genre.id} className="menu-item">{genre.title}</div>
+                <div key={genre.id} className="menu-item" onClick={() => {
+                    changeFilterAction({...filterReducer, genre: genre.id, currentPage:{number: 1, position: 0, phase: 0}});
+                    getGames();
+                }}>{genre.title}</div>
             )}
 
             <div className="filter">
                 <div className="title-main">Cортировка по:</div>
                 <div className="control-panel">
 
-                    <div className={"title-simple neutral-button" + (filter.price ? " active-simple" : "")}
-                         onClick={ e => {e.persist(); changeFilterValue("price", "rating", e.target)} }>
+                    <div className={"title-simple neutral-button" + (filterReducer.price ? " active-simple" : "")}
+                         onClick={ e => { e.persist(); changeFilterValue("price", "rating", e.target)} }>
                         <span className="not-active">цена</span>
-                        <img className="not-active" src={Arrow_2}/>
+                        <img className="not-active" src={Arrow_2} alt="arrow"/>
                     </div>
 
-                    <div className={"title-simple neutral-button" + (filter.rating ? " active-simple" : "")}
-                         onClick={ e => {e.persist(); changeFilterValue("rating", "price", e.target)} }>
+                    <div className={"title-simple neutral-button" + (filterReducer.rating ? " active-simple" : "")}
+                         onClick={ e => { e.persist(); changeFilterValue("rating", "price", e.target)} }>
                         <span className="not-active">рейтинг</span>
-                        <img className="not-active" src={Arrow_2}/>
+                        <img className="not-active" src={Arrow_2} alt="arrow"/>
                     </div>
 
 
                     <select className="title-simple neutral-button"
+                            value={filterReducer.genre}
                             onChange={e => {
                                 e.persist();
-                                setFilter(oldState => ({...oldState, genre: e.target.value}))}
-                            }>
-                        {genres.map(genre => (<option key={genre.id}>{genre.title}</option>))}
+                                changeFilterAction({...filterReducer, genre: e.target.value})
+                            }}
+                    >
+                        {genres.map(genre =>
+                            <option key={genre.id} value={genre.id}>{genre.title}</option>
+                        )}
                     </select>
 
                 </div>
@@ -76,13 +77,20 @@ function GenresMenu({mapDispatchToProps}) {
                 <input className="title-simple" placeholder="Поиск по названию..."
                        onChange={ e => {
                            e.persist();
-                           setFilter(oldState => ({...oldState, searchTitle: e.target.value}));
+                           changeFilterAction({...filterReducer, searchTitle: e.target.value})
                        }}
                 />
 
                 <div className="control-panel">
-                    <button className="neutral-button accept">Применить</button>
-                    <button className="neutral-button">Сбросить</button>
+                    <button className="neutral-button accept" onClick={ () => {
+                        changeFilterAction({...filterReducer, currentPage:{number: 1, position: 0, phase: 0}});
+                        getGames();
+                    }}>Применить</button>
+
+                    <button className="neutral-button" onClick={() => {
+                        changeFilterAction();
+                        getGames();
+                    }}>Сбросить</button>
                 </div>
             </div>
         </>
@@ -90,11 +98,12 @@ function GenresMenu({mapDispatchToProps}) {
 }
 
 function mapStateToProps(store) {
-    return store.filterReducer
+    return store
 }
 
 const mapDispatchToProps = {
-    changeFilterAction
+    changeFilterAction,
+    changeGameListAction
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(GenresMenu);

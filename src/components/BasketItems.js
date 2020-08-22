@@ -1,30 +1,49 @@
 import React from "react";
-import Car from "../assets/car.png";
+import {itemBasket} from "../service";
 
-export default function BasketItems() {
-    const arr = [];
-    for (let i = 0; i < 5; i++) {
-        arr.push(i);
+export default function BasketItems({basketGameList, setBasketGameList, basketReducer}) {
+
+    function deleteBasketGame(id) {
+        basketGameList.map((gameId, index) => {
+           if(gameId.id === id) {
+               basketGameList.splice(index, 1);
+               setBasketGameList(basketGameList);
+           }
+        });
     }
+
+
     return (
         <>
-            {arr.map(()=>
-                <div className="basket-item">
-                    <img className="product-image" src={Car}/>
+            {basketGameList.map(({img, title, price, rating, id}) =>
+                <div className="basket-item" key={id}>
+                    <img className="product-image" src={img}/>
+                    <div className="title-main">{title}</div>
                     <div className="description">
-                        <div className="title-main">My Tom a cat</div>
-                        <div className="title-simple"><b>Цена:</b> 1300 руб</div>
-                        <div className="title-simple"><b>Год выпуска:</b> 2011</div>
-                        <div className="title-simple"><b>В корзине:</b> 4</div>
+                        <div className="title-simple"><b>Цена:</b> {price} руб</div>
+                        <div className="title-simple"><b>Рейтинг:</b> {rating}</div>
+                        <div className="title-simple"><b>В корзине:</b> {basketReducer.basketGames.get(id)}</div>
                         <div className="control-panel">
-                            <button className="neutral-button accept">+</button>
-                            <button className="neutral-button">-</button>
+
+                            <button className="neutral-button accept" onClick={
+                                () => {
+                                    itemBasket("add", id);
+                                }
+                            }>+</button>
+
+                            <button className="neutral-button" onClick={
+                                () => {
+                                    itemBasket("delete", id);
+                                    if(!(basketReducer.basketGames.get(id) - 1)) { deleteBasketGame(id) }
+                                }
+                            }>-</button>
+
                         </div>
                     </div>
-                    <button className="neutral-button">Убрать</button>
                 </div>
             )}
 
         </>
     );
 }
+

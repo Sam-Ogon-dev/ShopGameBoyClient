@@ -1,0 +1,139 @@
+@media (min-width: 1024px) {
+  .burger-menu-icon {
+    display: none!important;
+  }
+}
+
+@media (max-width: 1024px) and (min-width: 720px){
+  .menu {
+    position: absolute;
+    left: -400px;
+    background: white;
+    height: fit-content;
+  }
+
+  .header {
+    background-color: rgba(255, 193, 7, 0.97);
+  }
+
+  .content {
+    justify-content: center;
+  }
+
+  .work-area {
+    width: 100%;
+  }
+}
+
+@media (max-width: 720px) and (min-width: 640px){
+  .icon-logo {
+    display: none;
+  }
+  .menu {
+    height: fit-content;
+    position: absolute;
+    left: -400px;
+    background: white;
+  }
+
+  .content {
+    justify-content: center;
+  }
+
+  .work-area {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) and (min-width: 375px){
+  .icon-basket {
+    width: 70px!important;
+    height: 70px!important;
+  }
+  .burger-menu-icon, .burger-menu-icon-close {
+    width: 50px!important;
+  }
+
+  .basket-item {
+    grid-template-columns: 1fr 1fr!important;
+    .product-image {
+      display: none;
+    }
+  }
+
+  .product-card-area {
+    grid-template-columns: repeat(auto-fit, minmax(220px, auto)) !important;
+  }
+  .product-card {
+    width: 220px!important;
+  }
+
+  .icon-logo {
+    display: none;
+  }
+
+  .logo-title {
+    font-size: 9vw;
+  }
+  .menu {
+    height: fit-content;
+    position: absolute;
+    left: -400px;
+    background: white;
+  }
+
+  .content {
+    justify-content: center;
+  }
+
+  .work-area {
+    width: 100%;
+  }
+}
+
+@media (max-width: 375px){
+  .icon-basket {
+    width: 60px!important;
+    height: 60px!important;
+  }
+  .burger-menu-icon, .burger-menu-icon-close {
+    width: 50px!important;
+  }
+  .basket-item {
+    .product-image {
+      display: none;
+    }
+    .control-panel {
+      justify-content: center;
+    }
+    border-radius: 2px;
+    padding: 10px;
+    display: flex!important;
+    flex-direction: column;
+    align-items: center;
+    height: fit-content;
+    width: 250px;
+    background-color: #f5f5f5;
+    box-shadow: 0 0 3px rgba(0,0,0,0.76);
+  }
+  .logo-title {
+    font-size: 35px;
+  }
+  .icon-logo {
+    display: none;
+  }
+  .menu {
+    height: fit-content;
+    position: absolute;
+    left: -400px;
+    background: white;
+  }
+
+  .content {
+    justify-content: center;
+  }
+
+  .work-area {
+    width: 100%;
+  }
+}
