@@ -5,8 +5,6 @@
   grid-template-columns: repeat(auto-fit, minmax(250px, auto));
   grid-gap: 20px;
   justify-content: center;
-  justify-items: center;
-  align-items: center;
   padding: 20px;
   margin: 0 20px 0 20px;
   width: 90%;
@@ -32,9 +30,8 @@
 
 .product-image {
   border-radius: 5px;
-  height: 200px;
   width: 200px;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .count-page {

@@ -1,42 +1,73 @@
 import React from "react";
-import Arrow_2 from "../assets/arrow_2.png";
-import Arrow from "../assets/arrow.png";
-import ProductCards from "./ProductCards";
-import Car from "../assets/car.png"
+import {connect} from "react-redux";
 import BasketItems from "./BasketItems";
+import {itemBasket} from "../service";
+import OrderForm from "./OrderForm";
+import {Link} from "react-router-dom";
 
-export default function BasketROUTE() {
+function BasketROUTE({basketReducer}) {
+    const [basketGameList, setBasketGameList] = React.useState([]);
+    const [sumPrice, setSumPrice] = React.useState(0);
+    const [orderForm, setOrderForm] = React.useState(false);
+
+    function countPrice(gameList) {
+        setSumPrice(gameList.reduce((sum, item) => sum + (item.price * basketReducer.basketGames.get(item.id) || 0), 0));
+    }
+
+    React.useEffect(() => {
+        const idArr = [];
+        for (let id of basketReducer.basketGames.keys()) {
+            idArr.push(id);
+        }
+        fetch("http://localhost:3001/basket/?id=" + idArr)
+            .then(r => r.json())
+            .then(r => {
+                setBasketGameList(r);
+                countPrice(r);
+            });
+    }, []);
+
+    React.useEffect(() => {
+        countPrice(basketGameList);
+    }, [basketReducer]);
+
     return (
         <>
+            {orderForm ? <OrderForm setOrderForm={setOrderForm}
+                                    order={Object.fromEntries(basketReducer.basketGames)}/> : ""}
+
             <div className="menu">
-                <div className="filter">
-                    <div className="title-main">Cортировка по:</div>
-                    <div className="control-panel">
-                        <div className="title-simple neutral-button active-rotate"><span>цена</span> <img src={Arrow_2}/></div>
-                        <div className="title-simple neutral-button"><span>рейтинг</span> <img src={Arrow_2}/></div>
-                    </div>
-
-                    <div className="control-panel">
-                        <button className="neutral-button accept">Применить</button>
-                        <button className="neutral-button">Сбросить</button>
-                    </div>
-                </div>
-
                 <div className="title-main">
-                    Итого: 5799 руб
+                    Итого: {sumPrice} руб
                 </div>
 
                 <div className="control-panel">
-                    <button className="neutral-button accept">Оформить заказ</button>
-                    <button className="neutral-button">Очистить корзину</button>
+                    <button className="neutral-button accept" onClick={() => {
+                        setOrderForm(true);
+                    }}>Оформить заказ</button>
+                    <button className="neutral-button" onClick={() => {
+                        itemBasket("clear");
+                        setBasketGameList([]);
+                        countPrice(basketGameList);
+                    }}>Очистить корзину</button>
                 </div>
+                <Link to="/"><div className="backLink">Вернуться к покупкам</div></Link>
 
             </div>
             <div className="work-area">
                 <div className="basket-area">
-                    <BasketItems />
+                    <BasketItems basketGameList={basketGameList}
+                                 setBasketGameList={setBasketGameList}
+                                 basketReducer={basketReducer}
+                                 countPrice={countPrice}/>
                 </div>
             </div>
         </>
     );
 }
+
+function mapStateToProps(store) {
+    return {basketReducer: store.basketReducer};
+}
+
+export default connect(mapStateToProps)(BasketROUTE);
