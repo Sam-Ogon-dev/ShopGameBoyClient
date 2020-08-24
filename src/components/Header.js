@@ -17,11 +17,14 @@ function Header({amount}) {
     React.useEffect(() => {
         const action = e => {
             const target = e.path.filter(item => {
-                if(item === document || item === window) { return false}
+                if(item === document || item === window) { return false }
 
                 if(item.classList.contains("burger-menu-icon")
                     || item.classList.contains("burger-menu-icon-close")
-                    || item.classList.contains("filter")) { return true}
+                    || item.id === "priceFilter"
+                    || item.id === "ratingFilter"
+                    || item.id === "gamesFilter"
+                    || item.id === "wordFilter") { return true }
             });
 
             if(!target.length) {
