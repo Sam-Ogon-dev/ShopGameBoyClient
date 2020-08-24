@@ -4,6 +4,7 @@ import BasketItems from "./BasketItems";
 import {itemBasket} from "../service";
 import OrderForm from "./OrderForm";
 import {Link} from "react-router-dom";
+import {ADDRESS} from "../settings";
 
 function BasketROUTE({basketReducer}) {
     const [basketGameList, setBasketGameList] = React.useState([]);
@@ -19,7 +20,7 @@ function BasketROUTE({basketReducer}) {
         for (let id of basketReducer.basketGames.keys()) {
             idArr.push(id);
         }
-        fetch("http://localhost:3001/basket/?id=" + idArr)
+        fetch(ADDRESS + "/basket/?id=" + idArr)
             .then(r => r.json())
             .then(r => {
                 setBasketGameList(r);

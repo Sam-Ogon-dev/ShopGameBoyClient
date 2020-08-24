@@ -4,13 +4,14 @@ import {connect} from "react-redux";
 import changeFilterAction from "../Actions/changeFilterAction";
 import {getGames} from "../service";
 import changeGameListAction from "../Actions/changeGameListAction";
+import {ADDRESS} from "../settings";
 
 function GenresMenu({filterReducer, changeFilterAction}) {
 
     const [genres, setGenres] = React.useState([]);
 
     React.useEffect(() => {
-        fetch("http://localhost:3001/genres")
+        fetch(ADDRESS + "/genres")
             .then(r => r.json())
             .then(r => setGenres(r));
     }, []);
@@ -47,20 +48,20 @@ function GenresMenu({filterReducer, changeFilterAction}) {
                 <div className="title-main">Cортировка по:</div>
                 <div className="control-panel">
 
-                    <div className={"title-simple neutral-button" + (filterReducer.price ? " active-simple" : "")}
+                    <div id="priceFilter" className={"title-simple neutral-button" + (filterReducer.price ? " active-simple" : "")}
                          onClick={ e => { e.persist(); changeFilterValue("price", "rating", e.target)} }>
                         <span className="not-active">цена</span>
                         <img className="not-active" src={Arrow_2} alt="arrow"/>
                     </div>
 
-                    <div className={"title-simple neutral-button" + (filterReducer.rating ? " active-simple" : "")}
+                    <div id="ratingFilter" className={"title-simple neutral-button" + (filterReducer.rating ? " active-simple" : "")}
                          onClick={ e => { e.persist(); changeFilterValue("rating", "price", e.target)} }>
                         <span className="not-active">рейтинг</span>
                         <img className="not-active" src={Arrow_2} alt="arrow"/>
                     </div>
 
 
-                    <select className="title-simple neutral-button"
+                    <select id="gamesFilter" className="title-simple neutral-button"
                             value={filterReducer.genre}
                             onChange={e => {
                                 e.persist();
@@ -74,7 +75,7 @@ function GenresMenu({filterReducer, changeFilterAction}) {
 
                 </div>
 
-                <input className="title-simple" placeholder="Поиск по названию..."
+                <input id="wordFilter" className="title-simple" placeholder="Поиск по названию..."
                        onChange={ e => {
                            e.persist();
                            changeFilterAction({...filterReducer, searchTitle: e.target.value})

@@ -12,8 +12,8 @@
 }
 
 .order-form {
-  width: 800px;
-  height: 600px;
+  min-width: 50vw;
+  min-height: 50vh;
   background: white;
   border-radius: 3px;
   display: flex;
