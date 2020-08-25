@@ -16,7 +16,7 @@ function Header({amount}) {
 
     React.useEffect(() => {
         const action = e => {
-            const target = e.path.filter(item => {
+            const target = e.composedPath().filter(item => {
                 if(item === document || item === window) { return false }
 
                 if(item.classList.contains("burger-menu-icon")
