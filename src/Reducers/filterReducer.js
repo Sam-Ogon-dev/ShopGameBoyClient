@@ -5,7 +5,7 @@ const initialState = {
     rating: false,
     genre: "8",
     searchTitle: "",
-    size: 12,
+    size: 10,
     currentPage: {number: 1, position: 0, phase: 0}
 }
 
